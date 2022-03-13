@@ -1,11 +1,12 @@
 import Twit from 'components/Twit';
 import { dbService, storageService } from 'fbase';
 import React, { useEffect, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 const Home = ({userObj}) => {
 const [twit, setTwit] = useState("");
 const [twits, setTwits] = useState([]);
-const [attach, setAttach] = useState()
+const [attach, setAttach] = useState("")
 
 // const getTwits = async()=> {
 //     const DBTwits = await dbServise.collection('twits').get();
@@ -36,17 +37,28 @@ useEffect(() => {
 
     const onSubmit = async (e) => {
     e.preventDefault();
-    storageService.ref().child(`${userObj.uid}/`)
-    // await dbService.collection('twits').add({
-    //     text: twit,
-    //     creatorId: userObj.uid,
-    //     createdAt: Date.now(),
-    // });
-    // setTwit("")
-}
+    let attachUrl = '';
+    if(attach != ''){
+    const attachRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
+    const response = await attachRef.putString(attach,'data_url');
+    attachUrl = await response.ref.getDownloadURL();
+    }
+    const twitObj = {
+        text: twit,
+        creatorId: userObj.uid,
+        createdAt: Date.now(),
+        attachUrl
+    }
+
+    await dbService.collection('twits').add(twitObj);
+    setTwit("");
+    setAttach("");
+};
+
 const onChange = (e) => {
 setTwit(e.target.value)
 };
+
 const onFileChange = (e) => {
     const theFile = e.target.files[0]
     const reader = new FileReader();
@@ -72,7 +84,7 @@ return(
     </form>
     <div>
         {twits.map((twit) => (
-            <Twit key={twit.id} twitObj={twit} isOwner={twit.creatorId === userObj.uid}/>
+            <Twit key={twit.id} twitObj={twit} isOwner={twit.creatorId === userObj.uid} attachUrl={twit.attachUrl}/>
         ))}
     </div>
 </div>
