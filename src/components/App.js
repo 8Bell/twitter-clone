@@ -4,27 +4,24 @@ import AppRouter from 'components/Router';
 
 
 function App() {
-  const [init, setInit] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [init, setInit] = useState(true);
   const [userObj, setUserObj] = useState(null)
   
   useEffect(() => {
   authService.onAuthStateChanged((user)=> {
   if(user){ 
-  setIsLoggedIn(true)
   setUserObj(user)
   }else{
-  setIsLoggedIn(false)
+  setInit(true)
  }
-setInit(true)}
-  )
+ })
   }, [])
  
   
   
   return (
     <>
-     {init ? <AppRouter isLoggedIn={isLoggedIn} userObj={userObj} /> : 'Initailizing...' }
+     {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} /> : 'Initailizing...' }
      <footer>&copy; {new Date().getFullYear()} Twitter</footer>
 
     </>

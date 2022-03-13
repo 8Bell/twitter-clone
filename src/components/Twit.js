@@ -32,15 +32,18 @@ const Twit = ({twitObj, isOwner}) => {
         <div>
        {
            editing ? (
-               <>
+            <>
+               {isOwner && (
+                   <>
            <form onSubmit={onSubmit}>
                <input type='text' value={newTwit} required onChange={onChange} />
                <input type='submit' value='Update' />
            </form> 
            <button onClick={toggleEditing}>Cancel</button>
            </>
-           )
-           : (
+           )}
+           </>
+           ) : (
            <>
            <h4>{twitObj.text}</h4>
            {isOwner &&
