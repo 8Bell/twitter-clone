@@ -1,5 +1,5 @@
 import Twit from 'components/Twit';
-import { dbService } from 'fbase';
+import { dbService, storageService } from 'fbase';
 import React, { useEffect, useState } from 'react';
 
 const Home = ({userObj}) => {
@@ -26,7 +26,7 @@ useEffect(() => {
 //  getTwits()
  dbService.collection('twits').onSnapshot((snapshot)=>{
      const twitArray = snapshot.docs.map((doc)=> ({
-         id:doc.id,
+         id:doc.id, 
          ...doc.data()
         }))
         setTwits(twitArray);
@@ -36,12 +36,13 @@ useEffect(() => {
 
     const onSubmit = async (e) => {
     e.preventDefault();
-    await dbService.collection('twits').add({
-        text: twit,
-        creatorId: userObj.uid,
-        createdAt: Date.now(),
-    });
-    setTwit("")
+    storageService.ref().child(`${userObj.uid}/`)
+    // await dbService.collection('twits').add({
+    //     text: twit,
+    //     creatorId: userObj.uid,
+    //     createdAt: Date.now(),
+    // });
+    // setTwit("")
 }
 const onChange = (e) => {
 setTwit(e.target.value)
