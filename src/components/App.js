@@ -10,18 +10,31 @@ function App() {
   useEffect(() => {
   authService.onAuthStateChanged((user)=> {
   if(user){ 
-  setUserObj(user)
+  setUserObj({
+    displayName: user.displayName,
+    uid: user.did,
+    updateProfile: (args) => user.updateProfile(args), 
+  })
   }else{
-  setInit(true)
+  setUserObj(null)
  }
  })
   }, [])
+
+  const refreshUser = () => {
+    const user = authService.currentUser;
+    setUserObj({
+      displayName: user.displayName,
+      uid: user.did,
+      updateProfile: (args) => user.updateProfile(args), 
+    });
+  }
  
   
   
   return (
     <>
-     {init ? <AppRouter isLoggedIn={Boolean(userObj)} userObj={userObj} /> : 'Initailizing...' }
+     {init ? <AppRouter refreshUser={refreshUser} isLoggedIn={Boolean(userObj)} userObj={userObj} /> : 'Initailizing...' }
      <footer>&copy; {new Date().getFullYear()} Twitter</footer>
 
     </>
