@@ -1,7 +1,7 @@
 import { dbService, storageService } from "fbase";
 import React, { useState } from "react";
 
-const Twit = ({twitObj, isOwner}) => {
+const Twit = ({twitObj, isOwner, attachUrl}) => {
 
     const [editing, setEditing] = useState(false)
     const [newTwit, setNewTwit] = useState(twitObj.text)
@@ -11,9 +11,12 @@ const Twit = ({twitObj, isOwner}) => {
         if(ok){
            await dbService.doc(`twits/${twitObj.id}`).delete();
            await storageService.refFromURL(twitObj.attachUrl).delete();
+        
         }
-    };
+
+    }
     const toggleEditing = () => setEditing((prev) => !prev);
+ 
     const onSubmit = async (e) => {
         e.preventDefault();
         await dbService.doc(`twits/${twitObj.id}`).update({
@@ -24,7 +27,9 @@ const Twit = ({twitObj, isOwner}) => {
         
     }
     const onChange = (e) => {
-       setNewTwit(e.target.value);};
+       setNewTwit(e.target.value);}
+    
+
     return(
         <div>
        {
@@ -33,11 +38,7 @@ const Twit = ({twitObj, isOwner}) => {
                {isOwner && (
                    <>
            <form onSubmit={onSubmit}>
-               <input 
-               type='text' 
-               value={newTwit} 
-               required 
-               onChange={onChange} />
+               <input type='text' value={newTwit} required onChange={onChange} />
                <input type='submit' value='Update' />
            </form> 
            <button onClick={toggleEditing}>Cancel</button>
@@ -47,13 +48,13 @@ const Twit = ({twitObj, isOwner}) => {
            ) : (
            <>
            <h4>{twitObj.text}</h4>
-           {twitObj.attachUrl && ( <img src={twitObj.attachUrl} width='200px' height='200px' /> )}
-           {isOwner && (
+           {attachUrl && <img src={attachUrl} width='200px' height='200px' /> }
+           {isOwner &&
            <>
            <button onClick={onDeleteClick}>Delete</button>
            <button onClick={toggleEditing}>Edit</button>
            </>    
-           )}
+            }
            </>
            )
        }
