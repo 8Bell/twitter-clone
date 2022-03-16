@@ -51,7 +51,9 @@ const Factory = ({ userObj }) => {
     };
     reader.readAsDataURL(theFile);
   };
+
   const onClearAttachment = () => setAttachment("");
+
   return (
     <form onSubmit={onSubmit} className="factoryForm">
       <div className="factoryInput__container">
@@ -69,7 +71,14 @@ const Factory = ({ userObj }) => {
       <span>Add photos</span>
         <FontAwesomeIcon icon={faPlus} />
       </label>
-      <input/>
+      <input 
+      id="attach-file"
+        type="file"
+        accept="image/*"
+        onChange={onFileChange}
+        style={{
+          opacity: 0,
+        }}/>
     
       {attachment && (
            <div className="factoryForm__attachment">
