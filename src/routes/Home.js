@@ -38,7 +38,7 @@ useEffect(() => {
     const onSubmit = async (e) => {
     e.preventDefault();
     let attachUrl = '';
-    if(attach != ''){
+    if(attach !== ''){
     const attachRef = storageService.ref().child(`${userObj.uid}/${uuidv4()}`);
     const response = await attachRef.putString(attach,'data_url');
     attachUrl = await response.ref.getDownloadURL();
@@ -67,7 +67,7 @@ const onFileChange = (e) => {
     };
     reader.readAsDataURL(theFile);
 };
-const onClearAttach = () => setAttach(null);
+const onClearAttach = () => setAttach("");
 
 return(
 <div>
