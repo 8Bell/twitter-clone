@@ -1,7 +1,8 @@
 import { authService, dbService } from 'fbase';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
-const Profile = ({ userObj }) => {
+
+export default ({ refreshUser, userObj }) => {
     const [newDisplayName, setNewDisplayName] = useState(userObj.displayName)
 
     const history = useHistory();
@@ -30,6 +31,7 @@ const onSubmit = async (e) => {
         await userObj.updateProfile({
             displayName: newDisplayName,
         });
+        refreshUser();
     }
 };
 return(
@@ -42,4 +44,3 @@ return(
     </>
 )
 }
-export default Profile;
