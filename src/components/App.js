@@ -4,7 +4,7 @@ import AppRouter from 'components/Router';
 
 
 function App() {
-  const [init, setInit] = useState(true);
+  const [init, setInit] = useState(false);
   const [userObj, setUserObj] = useState(null)
   
   useEffect(() => {

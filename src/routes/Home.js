@@ -37,9 +37,9 @@ useEffect(() => {
 
 
 return(
-<div>
+    <div className="container">
  <Factory userObj={userObj} />
-    <div>
+ <div style={{ marginTop: 30 }}>
         {twits.map((twit) => (
             <Twit key={twit.id} twitObj={twit} isOwner={twit.creatorId === userObj.uid} attachmentUrl={twit.attachmentUrl}/>
         ))}
